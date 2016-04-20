@@ -17,7 +17,7 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \caption{Nyquist filtering limits the communication bandwidth.\label{fig:LPF}}
 \end{figure}
 
-I order to maximize the SNR at the output, the low pass filtering is split between the transmitter and the receiver.
+In order to maximize the SNR at the output, the low pass filtering is split between the transmitter and the receiver.
 The halfroot nyquist filter $g(t)$ is such that the resulting operation $h(t) = g(t)*g(t)$ forms a nyquist filter which does not introduce inter symbol interference, as shown in figure~\ref{fig:noISI}
 \begin{figure}
 \centering
@@ -38,7 +38,16 @@ The results of the simulations are summarized by the BER curves of figure~\ref{f
 \subsubsection{Simulation}
 \paragraph{It is proposed to use the baseband equivalent model of the AWGN channel. Would it be
 possible to live with a bandpass implementation of the system?}
+The baseband signals have the advantages to first reduce the needed sampling frequency and second it allows to implement modulation and demodulation techniques regardless of the carrier frequency. That is why baseband equivalent is always preferred in modelling wireless communication channels.
 \paragraph{How do you choose the sample rate in Matlab?}
 \paragraph{How do you make sure you simulate the desired $\frac{E_b}{N_0}$ ratio?}
 \paragraph{How do you choose the number of transmitted data packets and their length?}
 
+\subsubsection{Communication System}
+\paragraph{Determine the supported (uncoded) bit rate as a function of the physical bandwidth.}
+\paragraph{Explain the trade-off communication capacity/reliability achieved by varying the constellation size.} 
+By increasing the constellation size, it reduces the distance between the constellations so even for the reliability of the communication. (...)
+\paragraph{Why do we choose the halfroot Nyquist filter to shape the complex symbols?}
+It is used to limit the bandwidth of the signal before transmission and the second halfroot Nyquist matched filter maximizes the SNR. (??)
+\paragraph{How do we implement the optimal demodulator? Give the optimisation criterion.}
+\paragraph{How do we implement the optimal detector? Give the optimisation criterion.}
