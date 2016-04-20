@@ -1,0 +1,31 @@
+\documentclass[11pt]{article}
+
+\usepackage{siunitx}
+\sisetup{range-phrase={ -- }}
+\sisetup{range-units=single}
+\usepackage{amsmath}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\usepackage{amssymb}
+
+\usepackage{mathspec}
+\setallmonofonts[
+  AutoFakeSlant,
+  BoldItalicFeatures={FakeSlant},
+  ]{Inconsolata}
+
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\usepackage{microtype}
+
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[hypcap]{caption}
+\graphicspath{ {pics/} }
+
+\usepackage{perpage}
+\MakePerPage{footnote}
+
+\usepackage{xcolor}
+\definecolor{link}{HTML}{4078C0}
+\usepackage[colorlinks=true, allcolors = black, linktoc = all]{hyperref}
+\usepackage{footnotebackref}
