@@ -39,12 +39,14 @@ The results of the simulations are summarized by the BER curves of figure~\ref{f
 \paragraph{It is proposed to use the baseband equivalent model of the AWGN channel. Would it be
 possible to live with a bandpass implementation of the system?}
 The baseband signals have the advantages to first reduce the needed sampling frequency and second it allows to implement modulation and demodulation techniques regardless of the carrier frequency. That is why baseband equivalent is always preferred in modelling wireless communication channels.
-\paragraph{How do you choose the sample rate in Matlab?} By first being sure the sample rate is at least 2 times greater than the maximal frequency 
+\paragraph{How do you choose the sample rate in Matlab?} 
+By first being sure the sample rate is at least 2 times greater than the maximal frequency (...?)
 \paragraph{How do you make sure you simulate the desired $\frac{E_b}{N_0}$ ratio?}
+From the noise, we can compute $N_0$ and compare.
 \paragraph{How do you choose the number of transmitted data packets and their length?}
-
+We use a huge number to get reliable results.
 \subsubsection{Communication System}
-\paragraph{Determine the supported (uncoded) bit rate as a function of the physical bandwidth.}
+\paragraph{Determine the supported (uncoded) bit rate as a function of the physical bandwidth.} On the internet : R = Bw * log2(1+SNR) (I only found in the course : R = log2(M)/T with R = bit rate, M = number of symbols and T = symbol duration)
 \paragraph{Explain the trade-off communication capacity/reliability achieved by varying the constellation size.} 
 By increasing the constellation size, it reduces the distance between the constellations so even for the reliability of the communication. (...)
 \paragraph{Why do we choose the halfroot Nyquist filter to shape the complex symbols?}
