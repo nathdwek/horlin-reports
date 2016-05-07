@@ -1,29 +1,28 @@
 \subsection{Effect of the CFO-caused ISI on the BER}
-The degradation of BER due only to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisi}.
+The degradation of BER due only to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisiber}.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{cfoisi.pdf}
-\caption{Impact of the ISI introduced by the CFO on the BER.\label{fig:cfoisi}}
+\includegraphics[width=\textwidth]{cfoisiber.pdf}
+\caption{Impact of the ISI introduced by the CFO on the BER.\label{fig:cfoisiber}}
 \end{figure}
-Figure~\ref{fig:cfoisi} shows that for a given value of $\Delta\omega$ and at higher noise levels, the BER curve is worsened but shows similar behaviour as the original curve with no CFO.
+Figure~\ref{fig:cfoisiber} shows that for a given value of $\Delta\omega$ and at higher noise levels, the BER curve is worsened but shows similar behaviour as the original curve with no CFO.
 However, past a certain value of $\frac{E_b}{N_0}$, the BER stops decreasing and only the error introduced by the ISI subsist.
 Those plateaus in the curves correspond to what we observed when we were testing the simulation with no CFO but with a misdefined filter which did not cancel the ISI.
-To conclude, figure~\ref{nysi} shows the ISI of two halfroot nyquist filters separated by CFO.
+To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filters separated by CFO.
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{cfo}
+    \includegraphics[width=\textwidth]{cfoisi.pdf}
+    \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $\beta = 0.3$, $n_{taps} = 20$, $f_m = \SI{1}{\mega\hertz}$, $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
 \end{figure}
 
-
-
-The impact of phase drift over time is immediate past a certain message length, and the BER becomes 0.5.
+If the cfo is not compensated, the slow phase drift over time renders the channel unusable and BER is 0.5 for any noise levels.
 
 \subsection{Sample time shift errors}
 Figure~\ref{fig:smpEps} shows the impact of the sample time shift on the error rate.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{smpEps.pdf}
-\caption{Impact of the sample time shift on the BER.\label{fig:smpEps}}
+\caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEps}}
 \end{figure}
 
 \subsection{Questions}
