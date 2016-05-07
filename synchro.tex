@@ -1,18 +1,26 @@
-\subsection{Introduction}
+\subsection{Degradation of BER due to ISI}
+The degradation of BER only due to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisi}.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{cfoisi.pdf}
+\caption{Impact of the ISI introduced by the CFO on the BER.\label{fig:cfoisi}}
+\end{figure}
 
+The impact of phase drift over time is immediate past a certain message length, and the BER becomes 0.5.
+
+\subsection{Sample time shift errors}
+Figure~\ref{fig:smpEps} shows the impact of the sample time shift on the error rate.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{smpEps.pdf}
+\caption{Impact of the sample time shift on the BER.\label{fig:smpEps}}
+\end{figure}
 
 \subsection{Questions}
 \subsubsection{Simulation}
 
-\paragraph{Derive analytically the baseband model of the channel including the synchronisation errors.} The synch:
-\begin{itemize}
-\item a Carrier Frequency Offset (CFO) $\Delta \omega$
-\item a phase offset $\phi_0$
-\item a Sample Clock Offset (SCO) $\delta$
-\item a time shift $t_0$
-\end{itemize}
-From these, one can update the baseband model as shown in figure~\ref{fig:sync}.
-
+\paragraph{Derive analytically the baseband model of the channel including the synchronisation errors.}
+Derivation: pen and paper.
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{baseband_sync.png}
 \caption{Baseband model with synchronization errors.\label{fig:sync}}
@@ -26,9 +34,9 @@ We do this by perfectly cancelling the CFO by hand after the filtering operation
 At the receiver, after the filtering operation, is signal is downsampled.
 During this downsampling operation, a fixed sampling time shift can be introduced by shifting the indexes.
 
-\paragraph{How do you select the simulated $E_{b}/N_{o}$ ratio?} Typical value of \SI{10}{\deci\bel} ? small enough to get something correct at the end and big enough to get some errors to be able to test our simulated channel with noise.
+\paragraph{How do you select the simulated $E_{b}/N_{o}$ ratio?} Typical value is \SI{10}{\deci\bel}. Small enough to get something correct at the end and big enough to get some errors to be able to test our simulated channel with noise.
 
-\paragraph{How do you select the lengths of the pilot and data sequences?} The pilot's length should be long enough to get a good estimation of the phase and the length of the data is selected to ensure a correct phase interpolation between two pilot sequences.
+\paragraph{How do you select the lengths of the pilot and data sequences?} The pilot's length should be long enough to get a good estimation of the phase and the length of the data is selected to ensure a correct phase interpolation between two pilot sequences. Furthermore, the pilot sequence length and repetition should be as small as possible in order to maximize the channel throughput.
 
 \subsubsection{Communication System}
 
@@ -37,10 +45,9 @@ During this downsampling operation, a fixed sampling time shift can be introduce
 
 
 \paragraph{Explain intuitively how the error is computed in the Gardner algorithm. Why is the
-Gardner algorithm robust to CFO?} The algorithm works with a feedback structure. Each time shift estimate is the sum of the previous one and a weigthed version of the error. With a good selection of coefficient, the error on the phase converges to zero ...
+Gardner algorithm robust to CFO?} At step n, the time shift error is estimated by looking at the value of the signal between samples n and n-1. If there was a zero crossing, then the middle value should be zero. The estimation of epsilon is then corrected by a term that is proportional to the value of this middle sample.
 
-
-\paragraph{Explain intuitively why the differential cross-correlator is better suited than the usual cross-correlator? Isn’t interesting to start the summation at $k = 0$ (no time shift)?}
-
+\paragraph{Explain intuitively why the differential cross-correlator is better suited than the usual cross-correlator? Isn’t it interesting to start the summation at $k = 0$ (no time shift)?}
+The differential cross-correlator first estimates the start time, and then the CFO. In doing so, it avoids an exhaustive 2D search which is computationally expensive.
 
 \paragraph{Are the frame and frequency acquisition algorithms optimal? If yes, give the optimisation criterion.}
