@@ -14,21 +14,21 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{commBW.pdf}
-\caption{Nyquist filtering limits the communication bandwidth.\label{fig:LPF}}
+\caption{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
 \end{figure}
 
 In order to maximize the SNR at the output, the low pass filtering is split between the transmitter and the receiver.
-The halfroot nyquist filter $g(t)$ is such that the resulting operation $h(t) = g(t)*g(t)$ forms a nyquist filter which does not introduce inter symbol interference, as shown in figure~\ref{fig:noISI}
+The halfroot nyquist filter $g(t)$ is such that the resulting operation $h(t) = g(t)*g(t)$ forms a nyquist filter which does not introduce inter symbol interference, as shown in figure~\ref{fig:noISI}.
 \begin{figure}
 \centering
 \includegraphics[width = \textwidth]{isi.pdf}
-\caption{Cancellation of the inter symbol interference of a raised cosine filter.\label{fig:noISI}}
+\caption{Cancellation of the inter symbol interference of a raised cosine filter. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$\label{fig:noISI}}
 \end{figure}
 
 \subsection{Impact of the noisy channel}
 Theory shows that a channel affected by AWGN can be modelled in the baseband by AWGN of corresponding power.
 This allows to easily simulate the BER of the noisy channel.
-The results of the simulations are summarized by the BER curves of figure~\ref{fig:BER}
+The results of the simulations are summarized by the BER curves of figure~\ref{fig:BER}.
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{BER.pdf}
 \caption{BER in function of $\frac{E_b}{N_0}$ for different QAM modulations.\label{fig:BER}}
