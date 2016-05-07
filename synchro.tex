@@ -17,12 +17,27 @@ To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filte
 
 If the cfo is not compensated, the slow phase drift over time renders the channel unusable and BER is 0.5 for any noise levels.
 
-\subsection{Sample time shift errors}
-Figure~\ref{fig:smpEps} shows the impact of the sample time shift on the error rate.
+\subsection{Sample time shift error}
+Figure~\ref{fig:smpEpsBER} shows the impact of the sample time shift on the error rate.
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{smpEps.pdf}
-\caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEps}}
+\includegraphics[width=\textwidth]{smpEpsBER.pdf}
+\caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEpsBER}}
+\end{figure}
+
+\subsection{Sample time shift error correction using the Gardner Algorithm}
+Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for different error weights.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{gardnerConverge.pdf}
+    \caption{Convergence as a function of $\kappa$. 4-QAM, $f_m = \SI{1}{\mega\hertz}$, $\beta = 0.3$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
+\end{figure}
+
+The resistance of the algorithm to CFO is shown in figure~\ref{fig:gConvCFO}.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width = \textwidth]{gardnerCFO.pdf}
+    \caption{Convergence of the algorithm as a function of $\Delta\omega$. 4-QAM, $f_m = \SI{1}{\mega\hertz}$, $\beta = 0.3$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$, $\kappa = 0.1$.\label{fig:gConvCFO}}
 \end{figure}
 
 \subsection{Questions}
