@@ -1,3 +1,6 @@
+%!TEX root = main.tex
+\subsection{Introduction}
+
 \subsection{Effect of the CFO-caused ISI on the BER}
 The degradation of BER due only to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisiber}.
 \begin{figure}[htbp]
@@ -12,7 +15,7 @@ To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filte
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{cfoisi.pdf}
-    \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $\beta = 0.3$, $n_{taps} = 20$, $f_m = \SI{1}{\mega\hertz}$, $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
+    \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
 \end{figure}
 
 If the cfo is not compensated, the slow phase drift over time renders the channel unusable and BER is 0.5 for any noise levels.
@@ -30,14 +33,13 @@ Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for diffe
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{gardnerConverge.pdf}
-    \caption{Convergence as a function of $\kappa$. 4-QAM, $f_m = \SI{1}{\mega\hertz}$, $\beta = 0.3$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
+    \caption{Convergence of the algorithm as a function of $\kappa$. $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
 \end{figure}
-
 The resistance of the algorithm to CFO is shown in figure~\ref{fig:gConvCFO}.
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width = \textwidth]{gardnerCFO.pdf}
-    \caption{Convergence of the algorithm as a function of $\Delta\omega$. 4-QAM, $f_m = \SI{1}{\mega\hertz}$, $\beta = 0.3$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$, $\kappa = 0.1$.\label{fig:gConvCFO}}
+    \includegraphics[width = \textwidth]{gardnerCFO2.pdf}
+    \caption{Convergence of the algorithm as a function of $\Delta\omega$.\label{fig:gConvCFO}}
 \end{figure}
 
 \subsection{Questions}

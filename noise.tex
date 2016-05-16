@@ -1,3 +1,4 @@
+%!TEX root = main.tex
 \subsection{Introduction}
 The goal of this first part is to implement a minimal working simulation of a QAM communication.
 In order to achieve that, the up- and downsampling blocks, the RRC filtering blocks and the baseband equivalent model of the channel, as represented in figure~\ref{fig:chain} must be implemented.
@@ -16,13 +17,14 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \includegraphics[width=\textwidth]{commBW.pdf}
 \caption{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
 \end{figure}
+The figures presented in the rest of this report were produced using those same values for $\beta$, $n_{taps}$ and $f_m$.
 
 In order to maximize the SNR at the output, the low pass filtering is split between the transmitter and the receiver.
 The halfroot nyquist filter $g(t)$ is such that the resulting operation $h(t) = g(t)*g(t)$ forms a nyquist filter which does not introduce inter symbol interference, as shown in figure~\ref{fig:noISI}.
 \begin{figure}
 \centering
 \includegraphics[width = \textwidth]{isi.pdf}
-\caption{Cancellation of the inter symbol interference of a raised cosine filter. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$\label{fig:noISI}}
+\caption{Cancellation of the inter symbol interference of a raised cosine filter.\label{fig:noISI}}
 \end{figure}
 
 \subsection{Impact of the noisy channel}
@@ -33,6 +35,7 @@ The results of the simulations are summarized by the BER curves of figure~\ref{f
 \includegraphics[width=\textwidth]{BER.pdf}
 \caption{BER in function of $\frac{E_b}{N_0}$ for different QAM modulations.\label{fig:BER}}
 \end{figure}
+Unless precised otherwise, the figures presented in the rest of this reported were produced using 16QAM.
 
 \subsection{Questions}
 \subsubsection{Simulation}
