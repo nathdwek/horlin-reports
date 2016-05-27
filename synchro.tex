@@ -1,6 +1,8 @@
 %!TEX root = main.tex
 \subsection{Introduction}
-
+In reality, the emitter and receiver do not share the same physical location and use local oscillators.
+For this reason, the communication is affected by different effects: CFO and SCO due to the imperfections of the crystals, carrier phase error and sample time shift due to the fact that the oscillator are not physically the same.
+In this section, we will simulate and implement compensation algorithm for the sample time shift and the CFO.
 \subsection{Effect of the CFO-caused ISI on the BER}
 The degradation of BER due only to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisiber}.
 \begin{figure}[htbp]
@@ -10,7 +12,8 @@ The degradation of BER due only to the ISI introduced by the CFO is shown in fig
 \end{figure}
 Figure~\ref{fig:cfoisiber} shows that for a given value of $\Delta\omega$ and at higher noise levels, the BER curve is worsened but shows similar behaviour as the original curve with no CFO.
 However, past a certain value of $\frac{E_b}{N_0}$, the BER stops decreasing and only the errors introduced by the ISI subsist.
-Those plateaus in the curves correspond to what we observed when we were testing the simulation with no CFO but with a misdefined filter which did not cancel the ISI.
+Those plateaus in the curves correspond to what we observed when we were testing the simulation with no CFO but with a badly defined filter which did not sufficiently cancel the ISI.
+
 To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filters separated by CFO.
 \begin{figure}[htbp]
     \centering
@@ -18,7 +21,7 @@ To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filte
     \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
 \end{figure}
 
-If the cfo is not compensated, the slow phase drift over time renders the channel unusable and BER is 0.5 for any noise levels.
+If the CFO is not compensated, the slow phase drift over time renders the channel unusable and the BER is 0.5 at any noise level.
 
 \subsection{Sample time shift error}
 Figure~\ref{fig:smpEpsBER} shows the impact of the sample time shift on the error rate.
@@ -27,6 +30,7 @@ Figure~\ref{fig:smpEpsBER} shows the impact of the sample time shift on the erro
 \includegraphics[width=\textwidth]{smpEpsBER.pdf}
 \caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEpsBER}}
 \end{figure}
+As expected, the error rate is worsened by the sample time shift and the channel is unusable when the incoming signal is sampled in between symbols.
 
 \subsection{Sample time shift error correction using the Gardner Algorithm}
 Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for different error weights.
@@ -35,12 +39,15 @@ Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for diffe
     \includegraphics[width=\textwidth]{gardnerConverge.pdf}
     \caption{Convergence of the algorithm as a function of $\kappa$. $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
 \end{figure}
+As predicted by the theory, the algorithm converges faster for higher values of $\kappa$, but at the expense of accuracy and stability.
+
 The resistance of the algorithm to CFO is shown in figure~\ref{fig:gConvCFO}.
 \begin{figure}[htbp]
     \centering
     \includegraphics[width = \textwidth]{gardnerCFO2.pdf}
-    \caption{Convergence of the algorithm as a function of $\Delta\omega$.\label{fig:gConvCFO}}
+    \caption{Convergence of the algorithm as a function of the CFO.\label{fig:gConvCFO}}
 \end{figure}
+We see that for a standard specified CFO value of \SI{10}{\ppm}, the Gardner algorithm still converges satisfyingly.
 
 \subsection{Questions}
 \subsubsection{Simulation}
@@ -54,13 +61,13 @@ Derivation: pen and paper.
 
 
 \paragraph{How do you separate the impact of the carrier phase drift and ISI due to the CFO in your simulation?}
-We do this by perfectly cancelling the CFO by hand after the filtering operation at the receiver.
+To only measure the impact of the ISI introduced by the CFO, the CFO is perfectly corrected by hand after the filtering operation at the receiver.
 
-\paragraph{How do you simulate the sampling time shift in practice?}The modulated message at the symbol frequency is first upsampled before all the other operations.
-At the receiver, after the filtering operation, is signal is downsampled.
-During this downsampling operation, a fixed sampling time shift can be introduced by shifting the indexes.
+\paragraph{How do you simulate the sampling time shift in practice?}The modulated message at the symbol frequency is first upsampled by a ratio $r_{os} = \frac{f_s}{f_m}$ before all the other operations.
+At the receiver, after the filtering operation, the signal is downsampled.
+During this downsampling operation, a fixed sampling time shift $t_0 = n \cdot f_s$ ($-\frac{r_{os}}{2} < n \leq \frac{r_{os}}{2}$, $n$ integer) can be introduced by shifting the indexes.
 
-\paragraph{How do you select the simulated $E_{b}/N_{o}$ ratio?} Typical value is \SI{10}{\deci\bel}. Small enough to get something correct at the end and big enough to get some errors to be able to test our simulated channel with noise.
+\paragraph{How do you select the simulated $E_{b}/N_{o}$ ratio?} Typical value is \SI{10}{\decibel}. Small enough to get something correct at the end and big enough to get some errors to be able to test our simulated channel with noise.
 
 \paragraph{How do you select the lengths of the pilot and data sequences?} The pilot's length should be long enough to get a good estimation of the phase and the length of the data is selected to ensure a correct phase interpolation between two pilot sequences. Furthermore, the pilot sequence length and repetition should be as small as possible in order to maximize the channel throughput.
 

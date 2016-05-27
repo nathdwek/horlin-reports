@@ -35,13 +35,13 @@ The results of the simulations are summarized by the BER curves of figure~\ref{f
 \includegraphics[width=\textwidth]{BER.pdf}
 \caption{BER in function of $\frac{E_b}{N_0}$ for different QAM modulations.\label{fig:BER}}
 \end{figure}
-Unless precised otherwise, the figures presented in the rest of this reported were produced using 16QAM.
+Unless precised otherwise, the figures presented in the rest of this reported were produced using 16-QAM.
 
 \subsection{Questions}
 \subsubsection{Simulation}
 \paragraph{It is proposed to use the baseband equivalent model of the AWGN channel. Would it be
 possible to live with a bandpass implementation of the system?}
-Simulating in the baseband has the advantage of reducing the sampling frequency needed (at least roughly twice the carrier frequency, which is unrealistic for modern \si{\giga\hertz} links) and allowing to implement and simulate modulation and demodulation techniques regardless of this carrier frequency.
+Simulating in the baseband has the advantage of reducing the sampling frequency needed (at least roughly twice the carrier frequency if simulating in the passband, which is unrealistic for modern \si{\giga\hertz} links) and allowing to implement and simulate modulation and demodulation techniques regardless of this carrier frequency.
 This is why baseband equivalent is always preferred in modelling wireless communication channels.
 \paragraph{How do you choose the sample rate in Matlab?}
 To be able to observe the effects of Nyquist filtering, the sampling rate must be at least twice as high as the symbol frequency. To be able to simulate sample time shift, even higher sampling rates should be used.
@@ -50,11 +50,19 @@ Rather than adding a predetermined amount of noise to the signal, we first estim
 \paragraph{How do you choose the number of transmitted data packets and their length?}
 In order to reliably observe a BER of $10^{-n}$, common practice is to send $10^{n+1}$ bits of data. We can send those in one simulation because the system is time invariant and the noise is ergodic.
 \subsubsection{Communication System}
-\paragraph{Determine the supported (uncoded) bit rate as a function of the physical bandwidth.} Obviously, R = log2(M)/T with R = bit rate, M = number of symbols and T = symbol duration. With Nyquist filtering: T = 1/FM which is the bandwidth occupied by the signal (see figure~\ref{fig:LPF}).
+\paragraph{Determine the supported (uncoded) bit rate as a function of the physical bandwidth.} From the theory, we know that $R = \frac{\log_2(N_{sym})}{T}$ with $R$ = bit rate, $N_{sym}$ = number of symbols and $T = \frac{1}{f_m}$ = symbol duration.
+With Nyquist filtering: we know that $\Delta_f = 2f_m$, as shown in \ref{fig:LPF}.
+Combining the two gives $R = \frac{\log_2(M)\cdot\Delta_f}{2}$
 \paragraph{Explain the trade-off communication capacity/reliability achieved by varying the constellation size.}
 As the constellation size increases for a given SNR, the distance between the "edges" of the constellations spots that are spread out by the noise decreases, which means overlaps and thus errors get more and more frequent.
+However, as seen in the previous question, increasing the number of symbols increases the bit rate for a given bandwidth.
 \paragraph{Why do we choose the halfroot Nyquist filter to shape the complex symbols?}
-Filtering is required at the transmitter in order to limit the bandwidth used by the transmission. However, ideally, filtering is also needed at the receiver in order to maximize the SNR, since the external noise can affect all frequencies. This is why we choose to split the filtering operation between the transmitter and the receiver. Finally, ISI cancellation is required in order to be able to demodulate the signal properly. This is achieved by splitting a raised cosine filter between the transmitter and the receiver.
+Filtering is required at the transmitter in order to limit the bandwidth used by the transmission.
+However, ideally, filtering is also needed at the receiver in order to maximize the SNR, since the external noise can affect all frequencies.
+This is why we choose to split the filtering operation between the transmitter and the receiver.
+Finally, ISI cancellation is required in order to be able to demodulate the signal properly.
+This is achieved by splitting a raised cosine filter between the transmitter and the receiver.
 \paragraph{How do we implement the optimal demodulator? Give the optimisation criterion.}
+
 
 \paragraph{How do we implement the optimal detector? Give the optimisation criterion.}
