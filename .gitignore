@@ -5,6 +5,3 @@
 *.toc
 *.fdb_latexmk
 *.fls
-
-*.fig
-*.eps
