@@ -1,7 +1,13 @@
 %!TEX root = main.tex
 \subsection{Introduction}
 In reality, the emitter and receiver do not share the same physical location and use local oscillators.
-For this reason, the communication is affected by different effects: CFO and SCO due to the imperfections of the crystals, carrier phase error and sample time shift due to the fact that the oscillator are not physically the same.
+For this reason, the communication is affected by different effects: CFO and SCO due to the imperfections of the crystals, carrier phase error and sample time shift due to the fact that the oscillators are not physically the same.
+The baseband model of the effects of these imperfections is presented on figure~\ref{fig:sync}
+\begin{figure}[htbp]
+\includegraphics[width=\textwidth]{baseband_sync.png}
+\caption{Baseband model with synchronization errors.\label{fig:sync}}
+\end{figure}
+
 In this section, we will simulate and implement compensation algorithm for the sample time shift and the CFO.
 \subsection{Effect of the CFO-caused ISI on the BER}
 The degradation of BER due only to the ISI introduced by the CFO is shown in figure~\ref{fig:cfoisiber}.
@@ -21,16 +27,21 @@ To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filte
     \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
 \end{figure}
 
-If the CFO is not compensated, the slow phase drift over time renders the channel unusable and the BER is 0.5 at any noise level.
+If the CFO is not compensated, the slow phase drift over time renders the channel unusable and the BER is 0.5 at any noise level. Figure~\ref{fig:cfoconst} shows the effect of noise and CFO on the constellation. This helps understand how uncompensated CFO renders any communication impossible.
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{cfoconstellation.pdf}
+  \caption{Constellation at different stages in the communication. \SI{10}{ppm} of CFO, $f_c = \SI{2}{\giga\hertz}$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:cfoconst}}
+\end{figure}
 
 \subsection{Sample time shift error}
-Figure~\ref{fig:smpEpsBER} shows the impact of the sample time shift on the error rate.
+Figure~\ref{fig:smpEpsBER} shows ow assume $f_c$ at the receiver differs from $f_c$ at the emitter by $\Delta f_c$.the impact of the sample time shift on the error rate.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{smpEpsBER.pdf}
 \caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEpsBER}}
 \end{figure}
-As expected, the error rate is worsened by the sample time shift and the channel is unusable when the incoming signal is sampled in between symbols.
+As expected, the error rate is worsened by the sample time shift and the channel is unusable when the incoming signal is sampled exactly inbetween symbols.
 
 \subsection{Sample time shift error correction using the Gardner Algorithm}
 Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for different error weights.
@@ -53,34 +64,61 @@ We see that for a standard specified CFO value of \SI{10}{\ppm}, the Gardner alg
 \subsubsection{Simulation}
 
 \paragraph{Derive analytically the baseband model of the channel including the synchronisation errors.}
-Derivation: pen and paper.
-\begin{figure}[htbp]
-\includegraphics[width=\textwidth]{baseband_sync.png}
-\caption{Baseband model with synchronization errors.\label{fig:sync}}
+On figure~\ref{fig:mod},
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{mod.png}
+  \caption[Transceiver block diagram.]{Transceiver block diagram. [Source: course notes]\label{fig:mod}}
 \end{figure}
-
+let us now assume that the receiver's oscillator differs from the emitter's oscillator by $\Delta \omega$ in pulsation and by $\varphi$ in initial phase, and let us not consider the additive noise, which has already been covered previously.
+We can write:
+\begin{align*}
+  r(t) = s(t) = &\real \{e_s(t)\} \cos(\omega_c t) + \imag \{e_s(t)\} \sin ( \omega_c t)\\
+  e_r(t) = &\real \{e_s(t)\} \left [ \cos(\omega_c t)\cos((\omega_c + \Delta\omega) t + \varphi) + \cos(\omega_c t)\sin((\omega_c + \Delta\omega) t + \varphi) \right ] \\
+  +j &\imag \{e_s(t)\} \left [ \sin(\omega_c t)\cos((\omega_c + \Delta\omega) t + \varphi) + \sin(\omega_c t)\sin((\omega_c + \Delta\omega) t + \varphi) \right ]
+\end{align*}
+By using simpson rules, and by removing the high frequency component which are eliminated by the low pass filters, we find:
+\[
+e_r(t) = \real\{e_s(t)\} \cos(\Delta \omega t + \varphi) - j\imag\{e_s(t)\} \sin(\Delta \omega t + \varphi)
+\]
+To obtain the baseband model of the channel, including CFO, we have to find $Z_{cfo}(t)$ such that
+\begin{align*}
+  \real \left \{Z_{cfo}(t)\cdot e^{j\omega_c t} \right \} = \real\{e_r(t)\} \cos(\omega_c t) - j \imag \{ e_r(t) \} \sin(\omega_c t)\\
+  \Rightarrow Z_{cfo}(t) = e_s(t)\cdot e^{j\Delta \omega t + \varphi}
+\end{align*}
+This means that the modulation/demodulation synchronization errors can be modeled in the baseband by multiplying the baseband signal by $e^{j\Delta \omega t + \varphi}$.
 
 \paragraph{How do you separate the impact of the carrier phase drift and ISI due to the CFO in your simulation?}
 To only measure the impact of the ISI introduced by the CFO, the CFO is perfectly corrected by hand after the filtering operation at the receiver.
 
 \paragraph{How do you simulate the sampling time shift in practice?}The modulated message at the symbol frequency is first upsampled by a ratio $r_{os} = \frac{f_s}{f_m}$ before all the other operations.
 At the receiver, after the filtering operation, the signal is downsampled.
-During this downsampling operation, a fixed sampling time shift $t_0 = n \cdot f_s$ ($-\frac{r_{os}}{2} < n \leq \frac{r_{os}}{2}$, $n$ integer) can be introduced by shifting the indexes.
+During this downsampling operation, a fixed sampling time shift $t_0 = n \cdot T_s$ ($-\frac{r_{os}}{2} < n \leq \frac{r_{os}}{2}$, $n$ integer) can be introduced by shifting the indexes.
 
-\paragraph{How do you select the simulated $E_{b}/N_{o}$ ratio?} Typical value is \SI{10}{\decibel}. Small enough to get something correct at the end and big enough to get some errors to be able to test our simulated channel with noise.
+\paragraph{How do you select the simulated $E_{b}/N_{0}$ ratio?} $E_{b}/N_{0}$ should be small enough so that every block in the synchronization correction chain can converge correctly.
+Else, if a block fails, for example Gardner compensation of the sample time shift, then all the following block will most likely fail as well, which means the whole experience is useless.
+$E_{b}/N_{0}$ should still be high enough so that it is realistic and it is possible to observe meaningful error rates.
+A typical value is \SI{10}{\decibel}.
 
-\paragraph{How do you select the lengths of the pilot and data sequences?} The pilot's length should be long enough to get a good estimation of the phase and the length of the data is selected to ensure a correct phase interpolation between two pilot sequences. Furthermore, the pilot sequence length and repetition should be as small as possible in order to maximize the channel throughput.
+\paragraph{How do you select the lengths of the pilot and data sequences?} The pilot's length should be long enough to get a good estimation of the phase and the time of arrival.
+The length of a data sequence is selected to ensure a correct phase interpolation between two pilot sequences.
+Furthermore, the pilot sequence length and repetition should be as small as those two considerations allow in order to maximize the channel throughput.
 
 \subsubsection{Communication System}
-
 
 \paragraph{In which order are the synchronisation effects estimated and compensated. Why?} First the sampling time shift is estimated and compensated with Gardner's algorithm, because frame and frequency acquisition can only work on a correctly sampled sequence, while Gardner's algorithm is robust to CFO.
 
 
 \paragraph{Explain intuitively how the error is computed in the Gardner algorithm. Why is the
-Gardner algorithm robust to CFO?} At step n, the time shift error is estimated by looking at the value of the signal between samples n and n-1. If there was a zero crossing, then the middle value should be zero. The estimation of epsilon is then corrected by a term that is proportional to the value of this middle sample.
+Gardner algorithm robust to CFO?} At step $n$, the time shift error is estimated by looking at the value of the signal between samples n and n-1. If there was a zero crossing, then the middle value should be zero or very small. The estimation of epsilon is then corrected by a term that is proportional to the value of this middle sample. The "direction" of the correction is determined by the sign of the middle value and the direction of the zero crossing (upwards and negative value means the sampling is "early", upwards and positive value means the sampling is "late"; and vice versa for downwards crossings).
 
 \paragraph{Explain intuitively why the differential cross-correlator is better suited than the usual cross-correlator? Isn’t it interesting to start the summation at $k = 0$ (no time shift)?}
-The differential cross-correlator first estimates the start time, and then the CFO. In doing so, it avoids an exhaustive 2D search which is computationally expensive.
+The differential cross-correlator first estimates the start time, and then the CFO. In doing so, it avoids an exhaustive 2D search which is computationally expensive. The alternative, a simple TOA ML estimation searches over a single paramater, but isn't robust to CFO.
+It is not interesting to start the summation at $k = 0$ because the term $D_0[n]$ is given by:
+\[
+D_0[n] = \frac{1}{N}\cdot1\cdot\sum_{l=0}^{N-1} \left [ \big | I[n] \big | ^2 \big | a[l] \big | ^2 \right ]
+\]
+This shows that it only depends on the average power of the window, and so it couldn't provide additional information.
 
 \paragraph{Are the frame and frequency acquisition algorithms optimal? If yes, give the optimisation criterion.}
+The differential cross correlator algorithm isn't optimal because it doesn't optimize over $n$ and $\Delta \omega$ at once. However, it is sufficient for practical applications with CFO $\lesssim \SI{10}{ppm}$ and reasonable amounts of noise $\frac{E_b}{N_0} \gtrsim \SI{4}{\decibel}$
