@@ -79,7 +79,25 @@ This is why we choose to split the filtering operation between the emitter and t
 Finally, ISI cancellation is required in order to be able to demodulate the signal properly.
 This is achieved by splitting a raised cosine filter between the emitter and the receiver.
 
-\paragraph{How do we implement the optimal demodulator? Give the optimisation criterion.}
+\paragraph{How do we implement the optimal demodulator? Give the optimization criterion.}
+The optimal demodulator is implemented using a matched filterbank $h_i(t)$ sampled at the symbol frequency. If the incoming signal $s(t)$ is matched to the filter, and the sampling is correctly synchronized,  $h_i(t) = s(-t)$ and the sampled output is a one since it is then equal to the autocorrelation of the $s(t)$ evaluated at $0$ (no lag).
 
+This output is disturbed by the correlation of the incoming noise with $h_i(t)$. Matched filters have the property that they maximize the SNR at $\frac{\mathcal{E}}{2N_0}$, which is the optimization criterion for a demodulator.
 
-\paragraph{How do we implement the optimal detector? Give the optimisation criterion.}
+\paragraph{How do we implement the optimal detector? Give the optimization criterion.}
+There are two possible optimization criteria:
+\begin{itemize}
+  \item The maximum a posteriori criterion:\\
+  ``What is the most probable emitted symbol given the received signal?"
+  \[
+  \underline{\tilde{s}}_m^{MAP} = \max_{\underline{s}_m} p[\underline{s}_m|\underline{r}]
+  \]
+  \item The maximum likelihood criterion:\\
+  ``What symbol is the most likely to have produced the received signal?"
+  \[
+  \underline{\tilde{s}}_m^{ML} = \max_{\underline{s}_m} p[\underline{r}|\underline{s}_m]
+  \]
+\end{itemize}
+
+The MAP criterion minimizes the BER, but requires to know the a priori probabilities ($p[\underline{s}_m]$), which in general is not practical. Fortunately, if the message is correctly entropy coded, the $M$ transmitted symbols are equiprobable and the two criterion are equivalent.
+The QAM detector implements the ML critertion by selecting the ``allowed" symbol which minimizes the euclidean distance to the received symbol.
