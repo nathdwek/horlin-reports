@@ -60,6 +60,54 @@ The resistance of the algorithm to CFO is shown in figure~\ref{fig:gConvCFO}.
 \end{figure}
 We see that for a standard specified CFO value of \SI{10}{\ppm}, the Gardner algorithm still converges satisfyingly.
 
+\subsection{Time of Arrival and CFO Estimation Using Frame Acquisition}
+In a practical application, the receiver doesn't know when the emitter will start to transmit a message.
+In the case of a continuous stream, the receiver still has to resynchronize regularly because of the synchronization imperfections we talked about in the introduction to this section.
+This is done by using differential cross correlation to a pilot sequence which is repeatedly inserted in the stream of data blocks.
+Using this cross correlator, it is possible to obtain an estimation of the time of arrival (TOA), meaning the position of the first bit of the frame in the incoming sequence, and of the CFO.
+In addition to regularly reestimating the CFO and TOA which can slowly drift over time, the regularly spaced pilot sequences allow to refine the CFO estimation using frame interpolation.
+
+Figure~\ref{fig:frametoa}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{frametoan.pdf}
+  \\\includegraphics[width=\textwidth]{frametoak.pdf}
+  \caption{Pilot TOA error as a function of N and K.\label{fig:frametoa}}
+\end{figure}
+shows the accuracy of the TOA estimation in function of N, K and the channel SNR for 4-QAM modulation.
+Figure~\ref{fig:frametoacfo}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{frametoacfo.pdf}
+  \caption{Resistance of the TOA estimation to CFO.\label{fig:frametoacfo}}
+\end{figure}
+shows the resistance of the TOA estimation to CFO for 4-QAM modulation with $N = 40$ and $K=8$.
+
+Figure~\ref{fig:framecfo}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{framecfon.pdf}
+  \\\includegraphics[width=\textwidth]{framecfok.pdf}
+  \caption{CFO error as a function of N and K.\label{fig:framecfo}}
+\end{figure}
+shows the accuracy of the CFO error as a function of N, K and the channel SNR for 4-QAM modulation.
+Figure~\ref{fig:framecfocfo}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{framecfocfo.pdf}
+  \caption{Resistance of the CFO estimation to CFO.\label{fig:framecfocfo}}
+\end{figure}
+shows the resistance of the CFO estimation to CFO for 4-QAM modulation with $N = 40$ and $K=8$.
+
+This shows that the TOA estimation is sufficient at realistic noise levels and standard CFO of \SI{10}{ppm}, but that frame interpolation is indeed needed to be able to correctly demodulate the incoming signal as presented in figure~\ref{fig:framecfoconst},
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\textwidth]{framecfoconstellation.pdf}
+  \caption[Effect on the constellation of the frame acquisition]{Effect on the constellation of the frame acquisition (25 independent 512 bits blocks, remaining CFO = \SI{2.3}{ppm}).\label{fig:framecfoconst}}
+\end{figure}
+which shows that the remaining CFO still introduces a significant phase drift over the course of a single 512 bits block. However, frame acquisition is still able to compensate most of the synchronization error.
+
+
 \subsection{Questions}
 \subsubsection{Simulation}
 
