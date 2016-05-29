@@ -1,15 +1,17 @@
-.PHONY: pics prev saw-it clean
+.PHONY: default pics prev saw-it clean
 
-SRC = $(wildcard ./*.eps)
-PDF = $(subst .eps,.pdf,$(SRC))
+SRC = $(wildcard ./src/*.eps)
+PDF = $(notdir $(subst .eps,.pdf,$(SRC)))
 PREVIEW = $(subst .eps,.lastviewed,$(SRC))
 
-%.pdf: %.eps
+default: pics
+
+%.pdf: ./src/%.eps
 	cat $< | epstopdf --filter | pdfcrop - $@;
 
 pics: $(PDF)
 
-%.lastviewed: %.pdf
+./src/%.lastviewed: %.pdf
 	xdg-open $< > $@
 
 prev: $(PREVIEW)
@@ -18,4 +20,4 @@ saw-it:
 	touch $(PREVIEW)
 
 clean:
-	touch $(SRC)
+	rm $(PDF)
