@@ -5,7 +5,7 @@ In order to achieve that, the up- and downsampling blocks, the RRC filtering blo
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{block.png}
-\caption{Block diagram of the communication system [source: Assignment introduction].\label{fig:chain}}
+\caption[Block diagram of the communication system.]{Block diagram of the communication system. [Source: Assignment introduction]\label{fig:chain}}
 \end{figure}
 The modulator and demodulator are supplied with the assignment statement.
 
@@ -15,7 +15,7 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{commBW.pdf}
-\caption{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
+\caption[Nyquist filtering limits the communication bandwidth.]{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
 \end{figure}
 The figures presented in the rest of this report were produced using those same values for $\beta$, $n_{taps}$ and $f_m$.
 
@@ -67,7 +67,7 @@ With Nyquist filtering: we know that $\Delta_f = 2f_m$, as shown in \ref{fig:LPF
 Combining the two gives $R = \frac{\log_2(M)\cdot\Delta_f}{2}$
 
 \paragraph{Explain the trade-off communication capacity/reliability achieved by varying the constellation size.}
-As the constellation size increases for a given SNR, the distance between the "edges" of the constellations spots that are spread out by the noise decreases, which means overlaps and thus errors get more and more frequent.
+As the constellation size increases for a given SNR, the distance between the ``edges" of the constellations spots that are spread out by the noise decreases, which means overlaps and thus errors get more and more frequent.
 However, as seen in the previous question, increasing the number of symbols increases the bit rate for a given bandwidth.
 
 This means that for a given SNR, it is possible to trade off reliability (higher BER) for capacity by increasing the number of symbols. Equivalently, it is possible to adapt the constellation size to the measured SNR to optimize the channel capacity given a specified BER, as is done in DVB-S2.

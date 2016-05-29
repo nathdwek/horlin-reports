@@ -5,7 +5,7 @@ For this reason, the communication is affected by different effects: CFO and SCO
 The baseband model of the effects of these imperfections is presented on figure~\ref{fig:sync}
 \begin{figure}[htbp]
 \includegraphics[width=\textwidth]{baseband_sync.png}
-\caption{Baseband model with synchronization errors.\label{fig:sync}}
+\caption[Baseband model with synchronization errors.]{Baseband model with synchronization errors. [Source: course notes]\label{fig:sync}}
 \end{figure}
 
 In this section, we will simulate and implement compensation algorithm for the sample time shift and the CFO.
@@ -24,14 +24,14 @@ To conclude, figure~\ref{fig:cfoisi} shows the ISI of two halfroot nyquist filte
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{cfoisi.pdf}
-    \caption{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
+    \caption[Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters.]{Effect of \SI{10}{ppm} of CFO on the ISI of the pair of filters. $f_c = \SI{2}{\giga\hertz}$, $\Rightarrow \Delta\omega = \SI{20}{\kilo\hertz}$.\label{fig:cfoisi}}
 \end{figure}
 
 If the CFO is not compensated, the slow phase drift over time renders the channel unusable and the BER is 0.5 at any noise level. Figure~\ref{fig:cfoconst} shows the effect of noise and CFO on the constellation. This helps understand how uncompensated CFO renders any communication impossible.
 \begin{figure}
   \centering
   \includegraphics[width=.8\textwidth]{cfoconstellation.pdf}
-  \caption{Constellation at different stages in the communication. \SI{10}{ppm} of CFO, $f_c = \SI{2}{\giga\hertz}$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:cfoconst}}
+  \caption[Constellation at different stages in the communication.]{Constellation at different stages in the communication. \SI{10}{ppm} of CFO, $f_c = \SI{2}{\giga\hertz}$, $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:cfoconst}}
 \end{figure}
 
 \subsection{Sample time shift error}
@@ -39,7 +39,7 @@ Figure~\ref{fig:smpEpsBER} shows ow assume $f_c$ at the receiver differs from $f
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{smpEpsBER.pdf}
-\caption{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples\label{fig:smpEpsBER}}
+\caption[Impact of the sample time shift on the error rate.]{Impact of the sample time shift on the error rate. $f_m = \SI{1}{\mega\hertz}$, $f_s = \SI{32}{\mega\hertz}$ $\Rightarrow \Delta k = 0, 1, 2, 3, 4, 8, 16$ samples.\label{fig:smpEpsBER}}
 \end{figure}
 As expected, the error rate is worsened by the sample time shift and the channel is unusable when the incoming signal is sampled exactly inbetween symbols.
 
@@ -48,7 +48,7 @@ Figure~\ref{fig:gConvK} shows the convergence of the Gardner algorithm for diffe
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{gardnerConverge.pdf}
-    \caption{Convergence of the algorithm as a function of $\kappa$. $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
+    \caption[Convergence of the algorithm as a function of $\kappa$.]{Convergence of the algorithm as a function of $\kappa$. $\frac{E_b}{N_0} = \SI{10}{\decibel}$.\label{fig:gConvK}}
 \end{figure}
 As predicted by the theory, the algorithm converges faster for higher values of $\kappa$, but at the expense of accuracy and stability.
 
@@ -131,8 +131,8 @@ e_r(t) = \real\{e_s(t)\} \cos(\Delta \omega t + \varphi) - j\imag\{e_s(t)\} \sin
 \]
 To obtain the baseband model of the channel, including CFO, we have to find $Z_{cfo}(t)$ such that
 \begin{align*}
-  \real \left \{Z_{cfo}(t)\cdot e^{j\omega_c t} \right \} = \real\{e_r(t)\} \cos(\omega_c t) - j \imag \{ e_r(t) \} \sin(\omega_c t)\\
-  \Rightarrow Z_{cfo}(t) = e_s(t)\cdot e^{j\Delta \omega t + \varphi}
+  \real \left \{Z_{cfo}(t)\cdot e^{j\omega_c t} \right \} &= \real\{e_r(t)\} \cos(\omega_c t) - j \imag \{ e_r(t) \} \sin(\omega_c t)\\
+  \Rightarrow Z_{cfo}(t) &= e_s(t)\cdot e^{j\Delta \omega t + \varphi}
 \end{align*}
 This means that the modulation/demodulation synchronization errors can be modeled in the baseband by multiplying the baseband signal by $e^{j\Delta \omega t + \varphi}$.
 
@@ -158,7 +158,7 @@ Furthermore, the pilot sequence length and repetition should be as small as thos
 
 
 \paragraph{Explain intuitively how the error is computed in the Gardner algorithm. Why is the
-Gardner algorithm robust to CFO?} At step $n$, the time shift error is estimated by looking at the value of the signal between samples n and n-1. If there was a zero crossing, then the middle value should be zero or very small. The estimation of epsilon is then corrected by a term that is proportional to the value of this middle sample. The "direction" of the correction is determined by the sign of the middle value and the direction of the zero crossing (upwards and negative value means the sampling is "early", upwards and positive value means the sampling is "late"; and vice versa for downwards crossings).
+Gardner algorithm robust to CFO?} At step $n$, the time shift error is estimated by looking at the value of the signal between samples n and n-1. If there was a zero crossing, then the middle value should be zero or very small. The estimation of epsilon is then corrected by a term that is proportional to the value of this middle sample. The ``direction" of the correction is determined by the sign of the middle value and the direction of the zero crossing (upwards and negative value means the sampling is ``early", upwards and positive value means the sampling is ``late"; and vice-versa for downwards crossings).
 
 \paragraph{Explain intuitively why the differential cross-correlator is better suited than the usual cross-correlator? Isn’t it interesting to start the summation at $k = 0$ (no time shift)?}
 The differential cross-correlator first estimates the start time, and then the CFO. In doing so, it avoids an exhaustive 2D search which is computationally expensive. The alternative, a simple TOA ML estimation searches over a single paramater, but isn't robust to CFO.
