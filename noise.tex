@@ -5,7 +5,7 @@ In order to achieve that, the up- and downsampling blocks, the RRC filtering blo
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{block.png}
-\caption{Block diagram of the communication system [source: Assignment introduction].\label{fig:chain}}
+\caption[Block diagram of the communication system.]{Block diagram of the communication system. [Source: Assignment introduction]\label{fig:chain}}
 \end{figure}
 The modulator and demodulator are supplied with the assignment statement.
 
@@ -15,7 +15,7 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{commBW.pdf}
-\caption{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
+\caption[Nyquist filtering limits the communication bandwidth.]{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
 \end{figure}
 The figures presented in the rest of this report were produced using those same values for $\beta$, $n_{taps}$ and $f_m$.
 
@@ -67,7 +67,7 @@ With Nyquist filtering: we know that $\Delta_f = 2f_m$, as shown in \ref{fig:LPF
 Combining the two gives $R = \frac{\log_2(M)\cdot\Delta_f}{2}$
 
 \paragraph{Explain the trade-off communication capacity/reliability achieved by varying the constellation size.}
-As the constellation size increases for a given SNR, the distance between the "edges" of the constellations spots that are spread out by the noise decreases, which means overlaps and thus errors get more and more frequent.
+As the constellation size increases for a given SNR, the distance between the ``edges" of the constellations spots that are spread out by the noise decreases, which means overlaps and thus errors get more and more frequent.
 However, as seen in the previous question, increasing the number of symbols increases the bit rate for a given bandwidth.
 
 This means that for a given SNR, it is possible to trade off reliability (higher BER) for capacity by increasing the number of symbols. Equivalently, it is possible to adapt the constellation size to the measured SNR to optimize the channel capacity given a specified BER, as is done in DVB-S2.
@@ -79,7 +79,25 @@ This is why we choose to split the filtering operation between the emitter and t
 Finally, ISI cancellation is required in order to be able to demodulate the signal properly.
 This is achieved by splitting a raised cosine filter between the emitter and the receiver.
 
-\paragraph{How do we implement the optimal demodulator? Give the optimisation criterion.}
+\paragraph{How do we implement the optimal demodulator? Give the optimization criterion.}
+The optimal demodulator is implemented using a matched filterbank $h_i(t)$ sampled at the symbol frequency. If the incoming signal $s(t)$ is matched to the filter, and the sampling is correctly synchronized,  $h_i(t) = s(-t)$ and the sampled output is a one since it is then equal to the autocorrelation of the $s(t)$ evaluated at $0$ (no lag).
 
+This output is disturbed by the correlation of the incoming noise with $h_i(t)$. Matched filters have the property that they maximize the SNR at $\frac{\mathcal{E}}{2N_0}$, which is the optimization criterion for a demodulator.
 
-\paragraph{How do we implement the optimal detector? Give the optimisation criterion.}
+\paragraph{How do we implement the optimal detector? Give the optimization criterion.}
+There are two possible optimization criteria:
+\begin{itemize}
+  \item The maximum a posteriori criterion:\\
+  ``What is the most probable emitted symbol given the received signal?"
+  \[
+  \underline{\tilde{s}}_m^{MAP} = \max_{\underline{s}_m} p[\underline{s}_m|\underline{r}]
+  \]
+  \item The maximum likelihood criterion:\\
+  ``What symbol is the most likely to have produced the received signal?"
+  \[
+  \underline{\tilde{s}}_m^{ML} = \max_{\underline{s}_m} p[\underline{r}|\underline{s}_m]
+  \]
+\end{itemize}
+
+The MAP criterion minimizes the BER, but requires to know the a priori probabilities ($p[\underline{s}_m]$), which in general is not practical. Fortunately, if the message is correctly entropy coded, the $M$ transmitted symbols are equiprobable and the two criterion are equivalent.
+The QAM detector implements the ML critertion by selecting the ``allowed" symbol which minimizes the euclidean distance to the received symbol.
