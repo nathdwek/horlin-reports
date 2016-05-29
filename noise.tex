@@ -1,6 +1,5 @@
 %!TEX root = main.tex
-\subsection{Introduction}
-The goal of this first part is to implement a minimal working simulation of a QAM communication.
+The goal of this first section is to implement a minimal working simulation of a QAM communication.
 In order to achieve that, the up- and downsampling blocks, the RRC filtering blocks and the baseband equivalent model of the channel, as represented in figure~\ref{fig:chain} must be implemented.
 \begin{figure}[htbp]
 \centering
@@ -17,7 +16,7 @@ The effect on the PSD of the signal is shown in figure~\ref{fig:LPF}.
 \includegraphics[width=\textwidth]{commBW.pdf}
 \caption[Nyquist filtering limits the communication bandwidth.]{Nyquist filtering limits the communication bandwidth. $\beta = 0.3$, $n_{taps} = 20$ $f_m = \SI{1}{\mega\hertz}.$ \label{fig:LPF}}
 \end{figure}
-The figures presented in the rest of this report were produced using those same values for $\beta$, $n_{taps}$ and $f_m$.
+The figures presented hereafter were produced using those same values for $\beta$, $n_{taps}$ and $f_m$.
 
 In order to maximize the SNR at the output, the low pass filtering is split between the transmitter and the receiver.
 The halfroot nyquist filter $g(t)$ is such that the resulting operation $h(t) = g(t)*g(t)$ forms a nyquist filter which does not introduce inter symbol interference, as shown in figure~\ref{fig:noISI}.
@@ -35,7 +34,7 @@ The results of the simulations are summarized by the BER curves of figure~\ref{f
 \includegraphics[width=\textwidth]{BER.pdf}
 \caption{BER in function of $\frac{E_b}{N_0}$ for different QAM modulations.\label{fig:BER}}
 \end{figure}
-Unless precised otherwise, the figures presented in the rest of this reported were produced using 16-QAM.
+Unless mentionned otherwise, the figures presented in the remain of this report were produced using 16-QAM.
 
 \subsection{Questions}
 \subsubsection{Simulation}
@@ -44,7 +43,7 @@ possible to live with a bandpass implementation of the system?}
 Simulating in the baseband has the advantage of reducing the sampling frequency needed (at least roughly twice the carrier frequency if simulating in the passband, which is unrealistic for modern \si{\giga\hertz} links) and allowing to implement and simulate modulation and demodulation techniques regardless of this carrier frequency.
 This is why the baseband equivalent model is always preferred to simulate wireless communication channels.
 \paragraph{How do you choose the sample rate in Matlab?}
-To be able to observe the effects of Nyquist filtering, the sampling rate must be at least twice as high as the symbol frequency. To be able to simulate sample time shift, even higher sampling rates should be used.
+To be able to observe the effects of Nyquist filtering, the sampling rate must be at least twice as high as the symbol frequency. To simulate sample time shift, even higher sampling rates should be used.
 \paragraph{How do you make sure you simulate the desired $\frac{E_b}{N_0}$ ratio?}
 Rather than adding a predetermined amount of noise to the signal, we first estimate its power in the useful frequency band, and then choose the noise power in order to obtain the required $\frac{E_b}{N_0}$ ratio.
 The baseband AWGN is given by:
@@ -80,7 +79,7 @@ Finally, ISI cancellation is required in order to be able to demodulate the sign
 This is achieved by splitting a raised cosine filter between the emitter and the receiver.
 
 \paragraph{How do we implement the optimal demodulator? Give the optimization criterion.}
-The optimal demodulator is implemented using a matched filterbank $h_i(t)$ sampled at the symbol frequency. If the incoming signal $s(t)$ is matched to the filter, and the sampling is correctly synchronized,  $h_i(t) = s(-t)$ and the sampled output is a one since it is then equal to the autocorrelation of the $s(t)$ evaluated at $0$ (no lag).
+The optimal demodulator is implemented using a matched filterbank $h_i(t)$ sampled at the symbol frequency. If the incoming signal $s(t)$ is matched to the filter and the sampling is correctly synchronized,  $h_i(t) = s(-t)$ and the sampled output is a one since it is then equal to the autocorrelation of the $s(t)$ evaluated at $0$ (no lag).
 
 This output is disturbed by the correlation of the incoming noise with $h_i(t)$. Matched filters have the property that they maximize the SNR at $\frac{\mathcal{E}}{2N_0}$, which is the optimization criterion for a demodulator.
 
@@ -99,5 +98,5 @@ There are two possible optimization criteria:
   \]
 \end{itemize}
 
-The MAP criterion minimizes the BER, but requires to know the a priori probabilities ($p[\underline{s}_m]$), which in general is not practical. Fortunately, if the message is correctly entropy coded, the $M$ transmitted symbols are equiprobable and the two criterion are equivalent.
-The QAM detector implements the ML critertion by selecting the ``allowed" symbol which minimizes the euclidean distance to the received symbol.
+The MAP criterion minimizes the BER, but requires to know the a priori probabilities ($p[\underline{s}_m]$), which is not practical. Fortunately, if the message is correctly entropy coded, the $M$ transmitted symbols are equiprobable and the two criteria are equivalent.
+The QAM detector implements the ML criterion by selecting the ``allowed" symbol which minimizes the euclidean distance to the received symbol.
