@@ -7,5 +7,4 @@
 *.fls
 *.lof
 
-*.fig
-*.eps
+pics/src/
