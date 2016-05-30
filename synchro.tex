@@ -67,6 +67,14 @@ This is done by using differential cross-correlation to a pilot sequence which i
 Using this cross correlator, it is possible to obtain an estimation of the time of arrival (ToA), meaning the position of the first bit of the frame in the incoming sequence, and of the CFO.
 In addition to regularly reestimating the CFO and ToA which can slowly drift over time, the regularly spaced pilot sequences allow to refine the CFO estimation using frame interpolation.
 
+The first output metric of the differential cross-correlator is shown in figure~\ref{fig:sumdk}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{sumdk.pdf}
+  \caption{ToA output metric.\label{fig:sumdk}}
+\end{figure}
+in order to illustrate the maximization over $n$ of $\sum_{k=1}^K |D_k[n]|$, for $N=40$ and $K = 8$. As expected, the output metric significantly at $n = 1$, which in this particular case is the true time of arrival.
+
 Figure~\ref{fig:frametoa}
 \begin{figure}
   \centering
